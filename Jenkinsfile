@@ -42,5 +42,13 @@ pipeline {
                 }
             }
         }
+
+        stage("Sonarqube Analysis"){
+            steps {
+                script {
+                    withForQualityGate abortPipeline: false, credentialsId: 'Jenkins-SonarQube-token'
+                }
+            }
+        }
     }
 }
