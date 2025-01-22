@@ -23,7 +23,7 @@ pipeline {
 
         stage("Build Application"){
             steps {
-                sh "mvn clean packagn"
+                sh "mvn clean package"
             }
         }
         
