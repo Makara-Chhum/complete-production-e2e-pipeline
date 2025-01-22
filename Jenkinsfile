@@ -14,10 +14,24 @@ pipeline {
             }
 
         }
+
         stage("Checkout from SCM"){
             steps {
                 git branch : 'main', credentialsId: 'github', url: 'https://github.com/Makara-Chhum/complete-production-e2e-pipeline'
             }
         }
+
+        stage("Build Application"){
+            steps {
+                sh "mvn clean packagn"
+            }
+        }
+        
+        stage("Test Application"){
+            steps {
+                sh "mvn test"
+            }
+        }
+
     }
 }
