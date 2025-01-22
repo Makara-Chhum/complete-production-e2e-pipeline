@@ -7,7 +7,7 @@ pipeline {
         jdk "Java17"
     }
     
-    stages {
+    stages{
         stage("Cleanup Workspace"){
             steps {
                 cleanWs()
@@ -43,7 +43,7 @@ pipeline {
             }
         }
 
-        stage("Sonarqube Analysis"){
+        stage("Sonarqube Quality Gate"){
             steps {
                 script {
                     withForQualityGate abortPipeline: false, credentialsId: 'Jenkins-SonarQube-token'
