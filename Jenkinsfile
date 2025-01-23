@@ -11,7 +11,7 @@ pipeline {
         APP_NAME = "complete-production-e2e-pipeline"
         RELEASE = "1.0.0"
         DOCKER_USER = "dockerproject321"
-        DOCKER_PASS = 'dockerhub'
+        DOCKER_PASS = credentials('dockerhub')
         DOCKER_NAMESPACE = "makaraksk"
         // IMAGE_NAME = "${DOCKER_NAMESPCE}" + "/" + "${DOCKER_USER}" + "/" + "${APP_NAME}"
         IMAGE_NAME = "${DOCKER_NAMESPACE}/${APP_NAME}"
@@ -70,13 +70,12 @@ pipeline {
                 script {
                     // build docker image
                     def docker_image
-                    docker.withRegistry('',DOCKER_PASS) {
-                        docker_image = docker.build "${IMAGE_NAME}"
+                    docker.withRegistry('', DOCKER_PASS) {
+                        docker_image = docker.build ("${IMAGE_NAME}:${IMAGE_TAG}")
                     }
 
-                    // push docker image
-                    docker.withRegistry('',DOCKER_PASS) {
-                        // docker login -u '${DOCKER_USER}' -p '${DOCKER_PASS}'
+                    // push docker image 
+                    docker.withRegistry('', DOCKER_PASS) {
                         docker_image.push("${IMAGE_TAG}")
                         docker_image.push("latest")
                     }
