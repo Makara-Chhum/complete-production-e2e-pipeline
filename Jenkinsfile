@@ -11,7 +11,7 @@ pipeline {
         APP_NAME = "complete-production-e2e-pipeline"
         RELEASE = "1.0.0"
         DOCKER_USER = "dockerproject321"
-        DOCKER_PASS = credentials('dockerhub')
+        DOCKER_PASS = 'dockerhub'
         DOCKER_NAMESPACE = "makaraksk"
         // IMAGE_NAME = "${DOCKER_NAMESPCE}" + "/" + "${DOCKER_USER}" + "/" + "${APP_NAME}"
         IMAGE_NAME = "${DOCKER_NAMESPACE}/${APP_NAME}"
