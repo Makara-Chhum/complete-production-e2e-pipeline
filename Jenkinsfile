@@ -66,43 +66,20 @@ pipeline {
         }
 
         stage("Build & Push Docker Image"){
-            // steps {
-            //     script {
-            //         // build docker image
-            //         def docker_image
-            //         docker.withRegistry('', DOCKER_PASS) {
-            //             sh 'docker login -u $DOCKER_USER -p Makara@43210docker'
-            //             sh 'docker info'
-            //             docker_image = docker.build ("${IMAGE_NAME}:${IMAGE_TAG}")
-            //         }
-
-            //         // push docker image 
-            //         docker.withRegistry('', DOCKER_PASS) {
-            //             sh 'docker login -u $DOCKER_USER -p Makara@43210docker'
-            //             sh 'docker info'
-            //             docker_image.push("latest")
-            //         }
-            //     }
-            // }
             steps {
                 script {
-                    // Build Docker Image
+                    // build docker image
                     def docker_image
-                    withCredentials([usernamePassword(credentialsId: 'dockerhub', usernameVariable: 'DOCKER_USER', passwordVariable: 'DOCKER_PASS')]) {
-                        docker.withRegistry('', DOCKER_PASS) {
-                            sh 'docker login -u $DOCKER_USER -p $DOCKER_PASS'
-                            sh 'docker info'
-                            docker_image = docker.build("${IMAGE_NAME}:${IMAGE_TAG}")
-                        }
-
-                        // Push Docker Image
-                        docker.withRegistry('', DOCKER_PASS) {
-                            sh 'docker login -u $DOCKER_USER -p $DOCKER_PASS'
-                            docker_image.push("${IMAGE_TAG}") // Push with specific tag
-                            docker_image.push("latest")      // Push latest tag
-                        }
+                    docker.withRegistry('', DOCKER_PASS) {
+                        docker_image = docker.build ("${IMAGE_NAME}:${IMAGE_TAG}")
+                        docker_image.push("latest")
                     }
-                }
+
+                //     // push docker image 
+                //     docker.withRegistry('', DOCKER_PASS) {
+                //         docker_image.push("latest")
+                //     }
+                // }
             }
         }
     }
