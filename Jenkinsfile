@@ -6,6 +6,17 @@ pipeline {
         maven "Maven3"
         jdk "Java17"
     }
+
+    environment {
+        APP_NAME = "complete-prodcution-e2e-pipeline"
+        RELEASE = "1.0.0"
+        DOCKER_USER = "dockerproject321"
+        DOCKER_PASS = 'Makara@43210docker'
+        IMAGE_NAME = "${DOCKER_USER}" + "/" + "${APP_NAME}"
+        IMAGE_TAG = "${RELEASE}-${BUILD_NUMBER}"
+        JENKINS_API_TOKEN = credentials("JENKINS_API_TOKEN")
+
+    }
     
     stages{
         stage("Cleanup Workspace"){
@@ -47,6 +58,19 @@ pipeline {
             steps {
                 script {
                     waitForQualityGate abortPipeline: false, credentialsId: 'Jenkins-SonarQube-token'
+                }
+            }
+
+        }
+
+        stage("Build & Push Docker Image"){ {
+            steps {
+                script {
+                    docker.withRegistry("", DOCKER_PASS){
+                        sh "docker build -t ${IMAGE_NAME} ."
+                        sh "docker login -u ${DOCKER_USER} -p ${DOCKER_PASS}"
+                        sh "docker push ${IMAGE_NAME}:${IMAGE_TAG}"
+                    }
                 }
             }
 
