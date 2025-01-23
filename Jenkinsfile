@@ -74,12 +74,7 @@ pipeline {
                         docker_image = docker.build ("${IMAGE_NAME}:${IMAGE_TAG}")
                         docker_image.push("latest")
                     }
-
-                //     // push docker image 
-                //     docker.withRegistry('', DOCKER_PASS) {
-                //         docker_image.push("latest")
-                //     }
-                // }
+                }
             }
         }
     }
