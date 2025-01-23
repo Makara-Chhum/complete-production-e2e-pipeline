@@ -88,7 +88,7 @@ pipeline {
                 script {
                     // Build Docker Image
                     def docker_image
-                    withCredentials([usernamePassword(credentialsId: 'DOCKER_CREDENTIAL_ID', usernameVariable: 'DOCKER_USER', passwordVariable: 'DOCKER_PASS')]) {
+                    withCredentials([usernamePassword(credentialsId: 'dockerhub', usernameVariable: 'DOCKER_USER', passwordVariable: 'DOCKER_PASS')]) {
                         docker.withRegistry('', DOCKER_PASS) {
                             sh 'docker login -u $DOCKER_USER -p $DOCKER_PASS'
                             sh 'docker info'
