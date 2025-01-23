@@ -66,14 +66,25 @@ pipeline {
         stage("Build & Push Docker Image"){
             steps {
                 script {
-                    docker.withRegistry('',DOCKER_PASS) {
-                        docker_image = docker.build "${IMAGE_NAME}"
-                    }
+                    // docker.withRegistry('',DOCKER_PASS) {
+                    //     docker_image = docker.build "${IMAGE_NAME}"
+                    // }
 
-                    docker.withRegistry('',DOCKER_PASS) {
-                        docker_image.push("${IMAGE_TAG}")
-                        docker_image.push('latest')
-                    }
+                    // docker.withRegistry('',DOCKER_PASS) {
+                    //     docker_image.push("${IMAGE_TAG}")
+                    //     docker_image.push('latest')
+                    // }
+
+                    // docker login
+                    sh 'echo $DOCKER_PASS | docker login -u $DOCKER_USER --password-stdin'
+                    // build the docker image
+                    sh "docker build -t ${IMAGE_NAME}:${IMAGE_TAG} ."
+                    // tag the docker image as latest
+                    sh "docker tag ${IMAGE_NAME}:${IMAGE_TAG} ${IMAGE_NAME}:latest"
+                    // push the docker image
+                    sh "docker push ${IMAGE_NAME}:${IMAGE_TAG}"
+                    // push the latest tag
+                    sh "docker push ${IMAGE_NAME}:latest"
                 }
             }
 
