@@ -71,14 +71,14 @@ pipeline {
                     // build docker image
                     def docker_image
                     docker.withRegistry('', DOCKER_PASS) {
-                        sh 'docker login -u $DOCKER_USER -p $DOCKER_PASS'
+                        sh 'docker login -u $DOCKER_USER -p Makara@43210docker'
                         sh 'docker info'
                         docker_image = docker.build ("${IMAGE_NAME}:${IMAGE_TAG}")
                     }
 
                     // push docker image 
                     docker.withRegistry('', DOCKER_PASS) {
-                        sh 'docker login -u $DOCKER_USER -p $DOCKER_PASS'
+                        sh 'docker login -u $DOCKER_USER -p Makara@43210docker'
                         sh 'docker info'
                         docker_image.push("${IMAGE_TAG}")
                         docker_image.push("latest")
