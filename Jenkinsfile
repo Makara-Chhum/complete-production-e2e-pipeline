@@ -76,7 +76,7 @@ pipeline {
 
                     // push docker image
                     docker.withRegistry('',DOCKER_PASS) {
-                        docker login -u '${DOCKER_USER}' -p '${DOCKER_PASS}'
+                        // docker login -u '${DOCKER_USER}' -p '${DOCKER_PASS}'
                         docker_image.push("${IMAGE_TAG}")
                         docker_image.push("latest")
                     }
