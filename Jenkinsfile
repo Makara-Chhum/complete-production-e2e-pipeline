@@ -66,27 +66,44 @@ pipeline {
         }
 
         stage("Build & Push Docker Image"){
+            // steps {
+            //     script {
+            //         // build docker image
+            //         def docker_image
+            //         docker.withRegistry('', DOCKER_PASS) {
+            //             sh 'docker login -u $DOCKER_USER -p Makara@43210docker'
+            //             sh 'docker info'
+            //             docker_image = docker.build ("${IMAGE_NAME}:${IMAGE_TAG}")
+            //         }
+
+            //         // push docker image 
+            //         docker.withRegistry('', DOCKER_PASS) {
+            //             sh 'docker login -u $DOCKER_USER -p Makara@43210docker'
+            //             sh 'docker info'
+            //             docker_image.push("latest")
+            //         }
+            //     }
+            // }
             steps {
                 script {
-                    // build docker image
+                    // Build Docker Image
                     def docker_image
-                    docker.withRegistry('', DOCKER_PASS) {
-                        sh 'docker login -u $DOCKER_USER -p Makara@43210docker'
-                        sh 'docker info'
-                        docker_image = docker.build ("${IMAGE_NAME}:${IMAGE_TAG}")
-                    }
+                    withCredentials([usernamePassword(credentialsId: 'DOCKER_CREDENTIAL_ID', usernameVariable: 'DOCKER_USER', passwordVariable: 'DOCKER_PASS')]) {
+                        docker.withRegistry('', DOCKER_PASS) {
+                            sh 'docker login -u $DOCKER_USER -p $DOCKER_PASS'
+                            sh 'docker info'
+                            docker_image = docker.build("${IMAGE_NAME}:${IMAGE_TAG}")
+                        }
 
-                    // push docker image 
-                    docker.withRegistry('', DOCKER_PASS) {
-                        sh 'docker login -u $DOCKER_USER -p Makara@43210docker'
-                        sh 'docker info'
-                        docker_image.push("${IMAGE_TAG}")
-                        docker_image.push("latest")
+                        // Push Docker Image
+                        docker.withRegistry('', DOCKER_PASS) {
+                            sh 'docker login -u $DOCKER_USER -p $DOCKER_PASS'
+                            docker_image.push("${IMAGE_TAG}") // Push with specific tag
+                            docker_image.push("latest")      // Push latest tag
+                        }
                     }
                 }
-
             }
-
         }
     }
 }
